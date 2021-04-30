@@ -17,7 +17,7 @@ public class World
 	//new code by lui
 	private int whiteScore;
 	private int blackScore;
-
+	private String currentMove; //it is used in evaluate 
 	private int alg; // 0 for random, 1 for minmax , other for monetcalo
 	public World()
 	{
@@ -80,7 +80,8 @@ public class World
 		//new code by lui
 		this.blackScore=0;
 		this.whiteScore=0;
-		alg=1;
+		this.currentMove=" ";
+		alg=15;
 	}
 
 	//alternate constructor added by lui
@@ -620,7 +621,7 @@ public class World
 				else
 					this.whiteMoves();
 
-
+				this.currentMove=move; //upagade the current move in case that the depth+1==maxDepth
 				int tmpMax=(int)miniMax(depth+1, Math.abs(color-1), maxDepth,alpha,beta);
 
 				if(tmpMax>max) {
@@ -664,7 +665,7 @@ public class World
 					this.blackMoves();
 				else
 					this.whiteMoves();
-
+				this.currentMove=move;
 				int tmpMin=(int)miniMax(depth+1, Math.abs(color-1), maxDepth, alpha, beta);
 				if(tmpMin<min) {
 					min=tmpMin;
@@ -693,6 +694,10 @@ public class World
 		int kingFound=0;
 
 		int gameScore=this.whiteScore-this.blackScore;
+		int x1=Integer.parseInt(this.currentMove.charAt(0)+"");
+		int y1=Integer.parseInt(this.currentMove.charAt(1)+"");
+		int x2=Integer.parseInt(this.currentMove.charAt(2)+"");
+		int y2=Integer.parseInt(this.currentMove.charAt(3)+"");
 
 		if(color==this.myColor) {
 			isMax=true;
@@ -841,6 +846,14 @@ public class World
 			}
 
 		}
+
+		//if it is a cross move then it means that in the last position you ate sbd (and we know that this move was made by the world.getColor);
+		if(x1!=x2&&y1!=y2 ) {
+			if(color==0) 
+				score0+=50;
+			else
+				score1+=50;
+		}
 		if(isMax&&color==0&&gameScore+10>0&&kingFound==1) //if i am a maximum player and i win then choose to live just one king (terminate the game)
 			return Integer.MAX_VALUE;
 		if(isMax&&color==1&&gameScore<0&&kingFound==1)	
@@ -944,8 +957,15 @@ public class World
 		return blackScore;
 	}
 
+	public String getCurrentMove() {
+		return currentMove;
+	}
 
+	public void setCurrentMove(String currentMove) {
+		this.currentMove = currentMove;
+	}
 
+	
 
 
 
