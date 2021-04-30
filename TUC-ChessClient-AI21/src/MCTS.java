@@ -117,6 +117,7 @@ public class MCTS {
 			newWorld.blackMoves();
 		
 		Node newNode=new Node(node, newWorld, nextMove);
+		newWorld.setCurrentMove(nextMove);
 		return rollout(newNode,depth-1);
 	}
 
