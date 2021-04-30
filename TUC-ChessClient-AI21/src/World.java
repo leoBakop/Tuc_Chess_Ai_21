@@ -541,12 +541,9 @@ public class World
 	}
 
 	private String selectRandomAction()
-	{	int x=0;
+	{
 	Random ran = new Random();
-	if(availableMoves.size()-5>0) 
-		x = ran.nextInt(availableMoves.size()-5); //changed by alex
-	else
-		x = ran.nextInt(availableMoves.size());
+	int	x = ran.nextInt(availableMoves.size());
 	return availableMoves.get(x);
 	}
 
@@ -592,7 +589,7 @@ public class World
 		//
 
 		if (depth==maxDepth) {
-			return this.evaluate(color);
+			return this.evaluate(Math.abs(color-1));
 		}
 
 		if(color==this.myColor) { //my color is max
@@ -629,12 +626,16 @@ public class World
 					retMove=move;
 				}
 				alpha=Integer.max(alpha, tmpMax);
-				if(beta<=alpha)
-					break;
+				
+				
 
 				//now i have to restore the previous values in board and avail moves
 				board=copyBoard(tmp_board);
 				availableMoves=copyArrayList(currentAvailMoves); //maybe this is not needed
+				
+				if(beta<=alpha)
+					break;
+
 
 			}
 			if(depth==0)
@@ -672,11 +673,14 @@ public class World
 					retMove=move;
 				}
 				beta=Integer.min(tmpMin, beta);
-				if(beta<=alpha)
-					break;
+				
 				//now i have to restore the previous values in board and avail moves
 				board=copyBoard(tmp_board);
 				availableMoves=copyArrayList(currentAvailMoves); //maybe this is not needed
+				
+				if(beta<=alpha)
+					break;
+				
 
 			}
 			if(depth==0)
@@ -849,12 +853,12 @@ public class World
 
 		}
 		//if it is a cross move then it means that in the last position you ate sbd (and we know that this move was made by the world.getColor);
-				if(x1!=x2&&y1!=y2 ) {
-					if(color==0) 
-						score0+=50;
-					else
-						score1+=50;
-				}
+			//	if(x1!=x2 && y1!=y2 ) {
+			//		if(color==0) 
+			//			score0+=20;
+			//		else
+			//			score1+=20;
+			//	}
 		
 		if(isMax&&color==0&&gameScore+10>0&&kingFound==1) //if i am a maximum player and i win then choose to live just one king (terminate the game)
 			return Integer.MAX_VALUE;
