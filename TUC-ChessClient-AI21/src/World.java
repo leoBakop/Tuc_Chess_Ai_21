@@ -80,7 +80,7 @@ public class World
 		this.blackScore=0;
 		this.whiteScore=0;
 		this.currentMove=" ";
-		alg=1;
+		alg=0;
 	}
 
 	//alternate constructor added by lui
@@ -196,7 +196,7 @@ public class World
 						move = Integer.toString(i) + Integer.toString(j) + 
 								Integer.toString(i-(k+1)) + Integer.toString(j);
 
-						availableMoves.add(0,move);
+						availableMoves.add(move); // it was add (0, move)
 
 						// prevent detouring a chesspart to attack the other
 						if(firstLetter.equals("B") || firstLetter.equals("P"))
@@ -238,7 +238,7 @@ public class World
 						move = Integer.toString(i) + Integer.toString(j) + 
 								Integer.toString(i) + Integer.toString(j-(k+1));
 
-						availableMoves.add(0,move);
+						availableMoves.add(move);
 
 						// prevent detouring a chesspart to attack the other
 						if(firstLetter.equals("B") || firstLetter.equals("P"))
@@ -259,7 +259,7 @@ public class World
 						move = Integer.toString(i) + Integer.toString(j) + 
 								Integer.toString(i) + Integer.toString(j+(k+1));
 
-						availableMoves.add(0,move);
+						availableMoves.add(move);
 
 						// prevent detouring a chesspart to attack the other
 						if(firstLetter.equals("B") || firstLetter.equals("P"))
@@ -408,7 +408,7 @@ public class World
 						move = Integer.toString(i) + Integer.toString(j) + 
 								Integer.toString(i-(k+1)) + Integer.toString(j);
 
-						availableMoves.add(0,move);
+						availableMoves.add(move);
 
 						// prevent detouring a chesspart to attack the other
 						if(firstLetter.equals("W") || firstLetter.equals("P"))
@@ -450,7 +450,7 @@ public class World
 						move = Integer.toString(i) + Integer.toString(j) + 
 								Integer.toString(i) + Integer.toString(j-(k+1));
 
-						availableMoves.add(0,move);
+						availableMoves.add(move);
 
 						// prevent detouring a chesspart to attack the other
 						if(firstLetter.equals("W") || firstLetter.equals("P"))
@@ -471,7 +471,7 @@ public class World
 						move = Integer.toString(i) + Integer.toString(j) + 
 								Integer.toString(i) + Integer.toString(j+(k+1));
 
-						availableMoves.add(0,move);
+						availableMoves.add(move);
 
 						// prevent detouring a chesspart to attack the other
 						if(firstLetter.equals("W") || firstLetter.equals("P"))
@@ -589,7 +589,7 @@ public class World
 		//
 
 		if (depth==maxDepth) {
-			return this.evaluate(Math.abs(color-1));
+			return this.evaluate(Math.abs(color-1));  //with the previous color
 		}
 
 		if(color==this.myColor) { //my color is max
@@ -726,24 +726,24 @@ public class World
 					case "K":
 						kingFound++;
 						if(i==0)
-							score0+=80;
+							score0+=100;
 						if(i==1)
-							score0+=20;
+							score0+=100;
 						if(i==2)
-							score0+=30;
+							score0+=100;
 						if(i==3)
-							score0+=40;
+							score0+=100;
 						if(i==4)
-							score0+=20;
+							score0+=100;
 						if(i==5)
-							score0+=20;
+							score0+=100;
 						if(i==6)
 							score0+=100;
 						break;
 
 					case"R": //tower
 						if(i==0)
-							score0+=190;
+							score0+=90;
 						if(i==1)
 							score0+=90;
 						if(i==2)
@@ -786,24 +786,24 @@ public class World
 					case "K":
 						kingFound++;
 						if(i==6)
-							score1+=80;
+							score1+=100;
 						if(i==5)
-							score1+=20;
+							score1+=100;
 						if(i==4)
-							score1+=30;
+							score1+=100;
 						if(i==3)
-							score1+=40;
+							score1+=100;
 						if(i==2)
-							score1+=20;
+							score1+=100;
 						if(i==1)
-							score1+=20;
+							score1+=100;
 						if(i==0)
 							score1+=100;
 						break;
 
 					case"R": //tower
 						if(i==6)
-							score1+=190;
+							score1+=90;
 						if(i==5)
 							score1+=90;
 						if(i==4)
@@ -843,9 +843,9 @@ public class World
 					if((board[i][j]).equals("P")) {
 
 						if(color==0)
-							score0-=30;
+							score0-=50;
 						else
-							score1-=30;
+							score1-=50;
 
 					}
 				}
