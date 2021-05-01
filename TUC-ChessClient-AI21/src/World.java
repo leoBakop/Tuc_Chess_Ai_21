@@ -19,6 +19,12 @@ public class World
 	private int blackScore;
 	private String currentMove; 
 	private int alg; // 0 for random, 1 for Minimax , other for Monte Carlo
+	private int counterMinMax=0; 
+	private int CounterMonteCarlo=0;
+	private int depthMC=4;
+	private int depthMinMax=4;
+	
+	
 	public World()
 	{
 		board = new String[rows][columns];
@@ -80,7 +86,7 @@ public class World
 		this.blackScore=0;
 		this.whiteScore=0;
 		this.currentMove=" ";
-		alg=0;
+		alg=15;
 	}
 
 	//alternate constructor added by lui
@@ -115,7 +121,7 @@ public class World
 
 		//return this.selectRandomAction();
 		//new code by lui
-		if(alg==1)
+		if(alg==1) 
 			return this.minMax();
 		else if(alg==0)
 		    return this.selectRandomAction();
@@ -581,12 +587,23 @@ public class World
 	//-------------------------------------------------------------------------------------------------------------------------
 	//our section
 	public String minMax() {
-		return (String) this.miniMax(0, this.myColor, 5, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		
+		this.counterMinMax++;
+		if(this.counterMinMax%12==0)
+			this.depthMinMax++;
+		
+		String move=(String) this.miniMax(0, this.myColor, this.depthMinMax, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		if(move.length()!=4) {
+			System.out.println("problem in minmax");
+			return this.selectRandomAction();
+		}
+			
+		return move;
 	}
 
 
 	private Object miniMax(int depth, int color, int maxDepth, int alpha, int beta) {
-		//
+		
 
 		if (depth==maxDepth) {
 			return this.evaluate(Math.abs(color-1));  //with the previous color
@@ -692,25 +709,8 @@ public class World
 	}
 
 	public int evaluate(int color) {
-		boolean isMax =false;
-		int score1=0, score0=0;
-
-		int kingFound=0;
-
-		int gameScore=this.whiteScore-this.blackScore;
-
-		int x1=Integer.parseInt(this.currentMove.charAt(0)+"");
-		int y1=Integer.parseInt(this.currentMove.charAt(1)+"");
-		int x2=Integer.parseInt(this.currentMove.charAt(2)+"");
-		int y2=Integer.parseInt(this.currentMove.charAt(3)+"");
-
 		
-		if(color==this.myColor) {
-			isMax=true;
-		}else {
-			isMax=false;
-		}
-
+		int score1=0, score0=0;
 
 		for(int i=0; i<this.rows; i++) {
 
@@ -724,7 +724,7 @@ public class World
 					switch(board[i][j].charAt(1)+"") {
 
 					case "K":
-						kingFound++;
+						
 						if(i==0)
 							score0+=100;
 						if(i==1)
@@ -784,7 +784,7 @@ public class World
 					//if that pawn is in the last row then give boost in that move
 					switch(board[i][j].charAt(1)+"") {
 					case "K":
-						kingFound++;
+						
 						if(i==6)
 							score1+=100;
 						if(i==5)
@@ -852,22 +852,16 @@ public class World
 			}
 
 		}
-		//if it is a cross move then it means that in the last position you ate sbd (and we know that this move was made by the world.getColor);
-			//	if(x1!=x2 && y1!=y2 ) {
-			//		if(color==0) 
-			//			score0+=20;
-			//		else
-			//			score1+=20;
-			//	}
 		
-		if(isMax&&color==0&&gameScore+10>0&&kingFound==1) //if i am a maximum player and i win then choose to live just one king (terminate the game)
+		
+		/**if(isMax&&color==0&&gameScore+10>0&&kingFound==1) //if i am a maximum player and i win then choose to live just one king (terminate the game)
 			return Integer.MAX_VALUE;
 		if(isMax&&color==1&&gameScore<0&&kingFound==1)	
 			return Integer.MAX_VALUE;
 		if((!isMax)&&color==0&&gameScore>0&&kingFound==1)
 			return Integer.MIN_VALUE;
 		if((!isMax)&&color==1&&gameScore<0&&kingFound==1)
-			return Integer.MIN_VALUE;
+			return Integer.MIN_VALUE;  */
 
 		if(color==0)
 			return score0-score1;
@@ -900,8 +894,11 @@ public class World
 
 
 	public String MonteCarlo() {
+		this.CounterMonteCarlo++;
+		if(this.CounterMonteCarlo%4==0)
+			this.depthMC++;
 		Node root=new Node(null, this, "0000"); //null move
-		MCTS m=new MCTS(root,7, 10000);
+		MCTS m=new MCTS(root,this.depthMC, 10000);
 		return m.monteCarloMove();
 	}
 
