@@ -88,7 +88,8 @@ public class MCTS {
 		String nextMove="";
 		if(depth==0) {
 			//return node.calculate_evaluate(node.getMove());
-			return node.getWorld().evaluate(node.getWorld().getMyColor());
+			//return node.getWorld().evaluate(node.getWorld().getMyColor());
+			return node.getWorld().evaluate(Math.abs(node.getWorld().getMyColor()-1));
 		}
 			
 		//choose randomly next move
