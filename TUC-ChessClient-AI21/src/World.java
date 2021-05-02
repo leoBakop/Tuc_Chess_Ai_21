@@ -21,6 +21,8 @@ public class World
 	private int alg; // 0 for random, 1 for Minimax , other for Monte Carlo
 	private int counterMinMax=0; 
 	private int CounterMonteCarlo=0;
+	private int MonteCarloRev=0;
+	private int MonteCarloRevCounter=0;
 	private int depthMC=4;
 	private int depthMinMax=4;
 	
@@ -85,7 +87,7 @@ public class World
 		//new code by lui
 		this.blackScore=0;
 		this.whiteScore=0;
-		this.currentMove=" ";
+		this.currentMove=" ";		
 		alg=15;
 	}
 
@@ -895,10 +897,12 @@ public class World
 
 	public String MonteCarlo() {
 		this.CounterMonteCarlo++;
-		if(this.CounterMonteCarlo%4==0)
+		if(this.CounterMonteCarlo%15==0)
 			this.depthMC++;
+		if(this.MonteCarloRevCounter%5==0)
+			this.MonteCarloRev+=1000;
 		Node root=new Node(null, this, "0000"); //null move
-		MCTS m=new MCTS(root,this.depthMC, 10000);
+		MCTS m=new MCTS(root,this.depthMC, 10000+this.MonteCarloRev);
 		return m.monteCarloMove();
 	}
 
