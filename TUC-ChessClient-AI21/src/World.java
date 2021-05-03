@@ -24,9 +24,9 @@ public class World
 	private int MonteCarloRev=0;
 	private int MonteCarloRevCounter=0;
 	private int depthMC=4;
-	private int depthMinMax=4;
-	
-	
+	private int depthMinMax=3;
+
+
 	public World()
 	{
 		board = new String[rows][columns];
@@ -126,13 +126,13 @@ public class World
 		if(alg==1) 
 			return this.minMax();
 		else if(alg==0)
-		    return this.selectRandomAction();
+			return this.selectRandomAction();
 		else 
 			return this.MonteCarlo();
 	}
 
-	public void whiteMoves()
-	{
+	public void whiteMoves(){
+
 		String firstLetter = "";
 		String secondLetter = "";
 		String move = "";
@@ -550,9 +550,9 @@ public class World
 
 	private String selectRandomAction()
 	{
-	Random ran = new Random();
-	int	x = ran.nextInt(availableMoves.size());
-	return availableMoves.get(x);
+		Random ran = new Random();
+		int	x = ran.nextInt(availableMoves.size());
+		return availableMoves.get(x);
 	}
 
 	public double getAvgBFactor()
@@ -589,23 +589,23 @@ public class World
 	//-------------------------------------------------------------------------------------------------------------------------
 	//our section
 	public String minMax() {
-		
+
 		this.counterMinMax++;
-		if(this.counterMinMax%12==0)
+		if(this.counterMinMax%10==0&& this.depthMinMax<6)
 			this.depthMinMax++;
-		
+
 		String move=(String) this.miniMax(0, this.myColor, this.depthMinMax, Integer.MIN_VALUE, Integer.MAX_VALUE);
 		if(move.length()!=4) {
 			System.out.println("problem in minmax");
 			return this.selectRandomAction();
 		}
-			
+
 		return move;
 	}
 
 
 	private Object miniMax(int depth, int color, int maxDepth, int alpha, int beta) {
-		
+
 
 		if (depth==maxDepth) {
 			return this.evaluate(Math.abs(color-1));  //with the previous color
@@ -645,13 +645,13 @@ public class World
 					retMove=move;
 				}
 				alpha=Integer.max(alpha, tmpMax);
-				
-				
+
+
 
 				//now i have to restore the previous values in board and avail moves
 				board=copyBoard(tmp_board);
 				availableMoves=copyArrayList(currentAvailMoves); //maybe this is not needed
-				
+
 				if(beta<=alpha)
 					break;
 
@@ -692,14 +692,14 @@ public class World
 					retMove=move;
 				}
 				beta=Integer.min(tmpMin, beta);
-				
+
 				//now i have to restore the previous values in board and avail moves
 				board=copyBoard(tmp_board);
 				availableMoves=copyArrayList(currentAvailMoves); //maybe this is not needed
-				
+
 				if(beta<=alpha)
 					break;
-				
+
 
 			}
 			if(depth==0)
@@ -711,9 +711,18 @@ public class World
 	}
 
 	public int evaluate(int color) {
-		
-		int score1=0, score0=0;
 
+		int score1=0, score0=0;
+/**
+		String move=this.getCurrentMove();
+		//perform the move
+		int r1=Integer.parseInt(move.charAt(0)+"");
+		int col1=Integer.parseInt(move.charAt(1)+"");
+		int r2=Integer.parseInt(move.charAt(2)+"");
+		int col2=Integer.parseInt(move.charAt(3)+"");
+		*/
+		
+		boolean kings[]= {false, false}; //king[0]=for white; king[1] for black
 		for(int i=0; i<this.rows; i++) {
 
 			for(int j=0; j<this.columns; j++ ) {
@@ -726,7 +735,7 @@ public class World
 					switch(board[i][j].charAt(1)+"") {
 
 					case "K":
-						
+						/*
 						if(i==0)
 							score0+=80;
 						if(i==1)
@@ -740,7 +749,9 @@ public class World
 						if(i==5)
 							score0+=20;
 						if(i==6)
-							score0+=100;
+							score0+=100; */
+						kings[0]=true;
+						score0+=150;
 						break;
 
 					case"R": //tower
@@ -762,7 +773,7 @@ public class World
 
 					case"P": //pawn
 						if(i==0)
-							score0+=60;
+							score0+=115;
 						if(i==1)
 							score0+=60;
 						if(i==2)
@@ -786,7 +797,7 @@ public class World
 					//if that pawn is in the last row then give boost in that move
 					switch(board[i][j].charAt(1)+"") {
 					case "K":
-						
+						/*
 						if(i==6)
 							score1+=80;
 						if(i==5)
@@ -800,7 +811,9 @@ public class World
 						if(i==1)
 							score1+=20;
 						if(i==0)
-							score1+=100;
+							score1+=100;*/
+						kings[1]=true;
+						score1+=150;
 						break;
 
 					case"R": //tower
@@ -834,7 +847,7 @@ public class World
 						if(i==1)
 							score1+=110;
 						if(i==0)
-							score1+=80;
+							score1+=115;
 						break;
 
 					}
@@ -845,17 +858,17 @@ public class World
 					if((board[i][j]).equals("P")) {
 
 						if(color==0)
-							score0-=50;
+							score0-=70;
 						else
-							score1-=50;
+							score1-=70;
 
 					}
 				}
 			}
 
 		}
-		
-		
+
+
 		/**if(isMax&&color==0&&gameScore+10>0&&kingFound==1) //if i am a maximum player and i win then choose to live just one king (terminate the game)
 			return Integer.MAX_VALUE;
 		if(isMax&&color==1&&gameScore<0&&kingFound==1)	
@@ -864,6 +877,13 @@ public class World
 			return Integer.MIN_VALUE;
 		if((!isMax)&&color==1&&gameScore<0&&kingFound==1)
 			return Integer.MIN_VALUE;  */
+		
+		if(color==0&& !kings[1]) //if i am white and there is no black king
+			score0+=Integer.MAX_VALUE;
+		else if (color==1 && !kings[0])  //warning else if 
+			score1+=Integer.MAX_VALUE;
+		
+		
 
 		if(color==0)
 			return score0-score1;
@@ -897,12 +917,12 @@ public class World
 
 	public String MonteCarlo() {
 		this.CounterMonteCarlo++;
-		if(this.CounterMonteCarlo%15==0)
+		if(this.CounterMonteCarlo%15==0&&this.depthMC<10)
 			this.depthMC++;
-		if(this.MonteCarloRevCounter%5==0)
+		if(this.MonteCarloRevCounter%5==0 && this.MonteCarloRev<10000)
 			this.MonteCarloRev+=1000;
 		Node root=new Node(null, this, "0000"); //null move
-		MCTS m=new MCTS(root,this.depthMC, 10000+this.MonteCarloRev);
+		MCTS m=new MCTS(root,this.depthMC, 5000+this.MonteCarloRev);
 		return m.monteCarloMove();
 	}
 
@@ -967,7 +987,7 @@ public class World
 		return blackScore;
 	}
 
-	
+
 
 	public String getCurrentMove() {
 		return currentMove;
