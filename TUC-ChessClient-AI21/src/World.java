@@ -728,17 +728,17 @@ public class World
 					case "K":
 						
 						if(i==0)
-							score0+=100;
+							score0+=80;
 						if(i==1)
-							score0+=100;
+							score0+=20;
 						if(i==2)
-							score0+=100;
+							score0+=30;
 						if(i==3)
-							score0+=100;
+							score0+=40;
 						if(i==4)
-							score0+=100;
+							score0+=20;
 						if(i==5)
-							score0+=100;
+							score0+=20;
 						if(i==6)
 							score0+=100;
 						break;
@@ -757,7 +757,7 @@ public class World
 						if(i==5)
 							score0+=90;
 						if(i==6)
-							score0+=60;
+							score0+=80;
 						break;
 
 					case"P": //pawn
@@ -788,17 +788,17 @@ public class World
 					case "K":
 						
 						if(i==6)
-							score1+=100;
+							score1+=80;
 						if(i==5)
-							score1+=100;
+							score1+=20;
 						if(i==4)
-							score1+=100;
+							score1+=30;
 						if(i==3)
-							score1+=100;
+							score1+=40;
 						if(i==2)
-							score1+=100;
+							score1+=20;
 						if(i==1)
-							score1+=100;
+							score1+=20;
 						if(i==0)
 							score1+=100;
 						break;
@@ -817,7 +817,7 @@ public class World
 						if(i==1)
 							score1+=90;
 						if(i==0)
-							score1+=60;
+							score1+=80;
 						break;
 
 					case"P": //pawn
