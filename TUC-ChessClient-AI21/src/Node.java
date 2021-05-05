@@ -115,7 +115,7 @@ public class Node {
 						break;
 					}
 
-
+ 
 				}
 				//evaluation based in pawns for black
 				if((world.getBoard()[i][j].charAt(0)+"").equals("B")) {
