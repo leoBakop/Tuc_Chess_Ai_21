@@ -91,7 +91,7 @@ public class Client
 				// get the String of the message
 				// no need to check for IPAddress and Port of sender, it must be the server of TUC-CHESS
 				receivedMsg = new String(receivePacket.getData(), 0, receivePacket.getLength(), "UTF-8");  //comment by lui
-				//receivedMsg="Τ01323440000";
+				
 				System.out.println("Received message from server : " + receivedMsg);
 				
 				// get the first letter of the String
@@ -119,7 +119,7 @@ public class Client
 						// beginning of the game
 						if(myColor == 0)
 						{
-							//new code by lui
+							//new code by team
 							this.upgradeScoreBlack();
 							this.upgradeScoreWhite();
 							//end of new code
@@ -204,7 +204,7 @@ public class Client
 					
 					if(nextPlayer==myColor)
 					{
-						//new code by lui
+						//new code by team
 						this.upgradeScoreBlack();
 						this.upgradeScoreWhite();
 						//end of new code
@@ -241,7 +241,7 @@ public class Client
 		}
 	}
 	
-	//these setters were written by lui
+	//these setters were written by team
 	//their purpose is to inform world about the current score
 	public void upgradeScoreWhite(){
 		this.world.setWhiteScore(scoreWhite);	
