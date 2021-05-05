@@ -24,6 +24,7 @@ public class MCTS {
 		return retval;
 	}
 
+
 	public Node searchForLeaf(Node node) {
 		node.setN(node.getN()+1);
 		if(node.isExpanded()) { //if all the children have been expanded then choose the
@@ -58,6 +59,8 @@ public class MCTS {
 				newWorld.blackMoves();
 
 			Node newNode=new Node(node, newWorld, nextMove);
+		
+		
 			newNode.setN(1);
 			//in the end just inform node for his new child;
 			node.addChild(newNode);
@@ -87,8 +90,6 @@ public class MCTS {
 	public int rollout(Node node, int depth) {
 		String nextMove="";
 		if(depth==0) {
-			//return node.calculate_evaluate(node.getMove());
-			//return node.getWorld().evaluate(node.getWorld().getMyColor());
 			return node.getWorld().evaluate(Math.abs(node.getWorld().getMyColor()-1));
 		}
 			
@@ -118,24 +119,11 @@ public class MCTS {
 			newWorld.blackMoves();
 		
 		Node newNode=new Node(node, newWorld, nextMove);
-		newWorld.setCurrentMove(nextMove);
+		//newWorld.setCurrentMove(nextMove);
 		return rollout(newNode,depth-1);
 	}
 
 
-/**
-	public static void main(String[] args) {
-		World world=new World();
-		world.setMyColor(0);
-		world.whiteMoves();
-		Node root=new Node(null,world,"0000");
-		MCTS mcts=new MCTS(root,5,10000);
-		long start=System.currentTimeMillis();
-		mcts.monteCarloMove();
-		long end=System.currentTimeMillis();
-		System.out.println("time spent: "+ (end-start)/1000);
-		System.out.println("end");
-	}  
-*/
+
 
 }
